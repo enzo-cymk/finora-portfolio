@@ -192,15 +192,29 @@ Algumas invariantes importantes do projeto:
 
 ## Interface
 
-Screenshots reais das principais telas serão adicionados a este repositório:
+A interface do Finora está sendo desenvolvida progressivamente, com foco
+em clareza, responsividade e uma identidade visual própria para o produto.
 
-- Cadastro
-- Login
-- Dashboard
-- Contas
-- Transações
-- Light Mode
-- Dark Mode
+As telas abaixo representam áreas que já passaram pela etapa atual de
+revisão visual.
+
+### Login
+
+![Tela de login do Finora](screenshots/login-light.png)
+
+A experiência de autenticação combina apresentação do produto e acesso à
+conta em uma interface responsiva alinhada à identidade visual do Finora.
+
+### Cadastro
+
+![Tela de cadastro do Finora](screenshots/cadastro-light.png)
+
+O cadastro combina o formulário principal com elementos que antecipam a
+experiência financeira do produto, mantendo hierarquia e clareza.
+
+> Dashboard, Contas e Transações já estão funcionalmente implementados,
+> mas suas interfaces ainda passarão por novas etapas de design antes de
+> serem apresentadas visualmente neste portfólio.
 
 ## Roadmap
 
