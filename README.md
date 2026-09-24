@@ -2,15 +2,19 @@
 
 **Controle. Planeje. Evolua.**
 
-Aplicação full-stack de controle financeiro pessoal desenvolvida com **Next.js, React, TypeScript, PostgreSQL e Prisma**, com arquitetura preparada para múltiplas instituições financeiras, transações sincronizadas e categorização automática.
+Aplicação full-stack de controle financeiro pessoal desenvolvida com **Next.js, React, TypeScript, PostgreSQL e Prisma**, com arquitetura preparada para múltiplas instituições financeiras, transações sincronizadas, categorização automática e evolução para integrações financeiras reais.
 
-`Next.js 15` · `React 19` · `TypeScript` · `PostgreSQL` · `Prisma 6` · `Auth.js` · `LLMs`
+`Next.js 15` · `React 19` · `TypeScript` · `PostgreSQL 16` · `Prisma 6` · `Auth.js` · `LLMs`
 
 > 🚧 **Em desenvolvimento ativo.** Este é o portfólio técnico público do Finora. O código-fonte principal permanece em repositório privado.
 
+---
+
 ## Interface
 
-A interface está sendo desenvolvida progressivamente, com foco em clareza, responsividade e identidade visual própria. As telas abaixo já passaram pela etapa atual de revisão visual.
+O Finora possui uma interface própria inspirada em produtos financeiros modernos, com foco em clareza, hierarquia visual, consistência e uso de dados reais do domínio financeiro.
+
+As telas são desenvolvidas e revisadas progressivamente, mantendo a mesma identidade visual entre os diferentes módulos.
 
 ### Login
 
@@ -24,14 +28,58 @@ A experiência de autenticação combina apresentação do produto e acesso à c
 
 O cadastro combina o formulário principal com elementos que antecipam a experiência financeira do produto, mantendo hierarquia e clareza.
 
-> Dashboard, Contas e Transações já estão funcionalmente implementados, mas suas interfaces ainda passarão por novas etapas de design antes de serem apresentadas visualmente neste portfólio.
+---
+
+## 📸 Screenshots
+
+### Dashboard
+
+Visão consolidada da vida financeira, com saldo, receitas, despesas, resultado do período, investimentos e acompanhamento de orçamentos.
+
+![Dashboard](screenshots/dashboard-dark.png)
+
+### Contas
+
+Gestão das contas financeiras, com saldo consolidado, tipo, origem, status e variação de saldo.
+
+![Contas](screenshots/contas-dark.png)
+
+### Transações
+
+Visualização das movimentações financeiras com filtros, busca, ordenação e categorização.
+
+![Transações](screenshots/transacoes.png)
+
+### Investimentos
+
+Acompanhamento da carteira e composição dos investimentos.
+
+![Investimentos](screenshots/investimentos.png)
+
+### Orçamentos
+
+Acompanhamento dos limites financeiros definidos por categoria.
+
+![Orçamentos](screenshots/orcamentos.png)
+
+### Relatórios
+
+Análise da evolução financeira e dos dados por período.
+
+![Relatórios](screenshots/relatorios.png)
+
+---
 
 ## O projeto em poucos pontos
 
-- **Dados reais no domínio:** Dashboard, Contas e Transações compartilham os mesmos services financeiros.
+- **Dados reais no domínio:** Dashboard, Contas, Transações, Transferências, Orçamentos, Investimentos e Relatórios utilizam o mesmo domínio financeiro.
 - **Fundação multibanco:** contas `MANUAL` e `CONNECTED`, transações `MANUAL` e `SYNCED`, normalização, ingestão e idempotência.
 - **Automação controlada:** categorização manual e regras determinísticas sem alterar o fato financeiro original.
-- **Engenharia com múltiplas LLMs:** modelos diferentes são usados em planejamento, implementação, revisão e auditoria dentro de um processo de validação técnica.
+- **Segurança por ownership:** operações financeiras são vinculadas ao usuário autenticado e possuem validações de relacionamento no servidor.
+- **Engenharia com múltiplas LLMs:** diferentes modelos e ferramentas são utilizados em planejamento, implementação, revisão, auditoria e validação.
+- **Evolução incremental:** novas funcionalidades são adicionadas sobre uma base de domínio já estruturada, evitando mudanças isoladas que quebrem a consistência financeira.
+
+---
 
 ## Funcionalidades implementadas
 
@@ -45,8 +93,12 @@ O cadastro combina o formulário principal com elementos que antecipam a experi�
 - Reenvio com cooldown
 - Rate limiting
 - Proteção contra enumeração no fluxo de verificação
-- Sessão autenticada e proteção de rotas
+- Sessão autenticada
+- Invalidação de sessões
+- Proteção de rotas
 - Isolamento de dados por usuário
+- Validação de ownership no servidor
+- Hardening de operações financeiras
 
 ### Dashboard
 
@@ -57,8 +109,11 @@ O Dashboard utiliza dados financeiros reais do usuário autenticado e apresenta:
 - resultado financeiro;
 - gastos por categoria;
 - gastos por conta;
-- transações recentes;
-- seleção de período.
+- investimentos;
+- acompanhamento de orçamentos;
+- seleção de competência;
+- períodos de análise;
+- visão consolidada do fluxo de caixa.
 
 ### Contas
 
@@ -66,43 +121,108 @@ O Dashboard utiliza dados financeiros reais do usuário autenticado e apresenta:
 - Saldo individual e consolidado
 - Contas `MANUAL` e `CONNECTED`
 - Diferentes tipos de conta
+- Identificação de instituição
+- Status da conta
+- Variação de saldo
+- Histórico de variação de saldo
 - Saldo derivado das movimentações financeiras
 
 ### Transações
 
 - Transações `MANUAL` e `SYNCED`
 - Receitas e despesas
-- Filtros, busca, ordenação e paginação
+- Filtros
+- Busca
+- Ordenação
+- Paginação
 - Agrupamento por data
-- Conta, categoria, método de pagamento, instituição e origem
-- Criação de transações manuais
+- Conta
+- Categoria
+- Método de pagamento
+- Instituição
+- Origem da movimentação
+- Criação e gerenciamento de transações manuais
+- Regras de categorização
 
-### Categorização
+### Transferências
+
+- Transferências entre contas próprias
+- Conta de origem
+- Conta de destino
+- Valor
+- Data
+- Descrição
+- Geração das movimentações financeiras correspondentes
+- Integridade entre transferência e transações relacionadas
+- Atualizações atômicas das operações relacionadas
+
+Uma transferência é tratada como uma operação financeira composta por:
+
+```text
+Transfer
+   ↓
+Transaction OUT
+   ↓
+Transaction IN
+
+As alterações são validadas para preservar a consistência entre os registros relacionados.
+
+Orçamentos
+Orçamentos por categoria
+Limites financeiros
+Período de competência
+Valor utilizado
+Percentual utilizado
+Limite disponível
+Alertas de utilização
+Acompanhamento diretamente no Dashboard
+Investimentos
+Posições de investimento
+Classes de ativos
+Ticker
+Valor atual
+Conta relacionada
+Composição da carteira
+Visão consolidada dos investimentos
+Relatórios
+Evolução financeira por período
+Receitas
+Despesas
+Resultado financeiro
+Distribuição por categoria
+Distribuição por conta
+Análises consolidadas do domínio financeiro
+Categorização
 
 O Finora possui categorização manual e uma primeira camada de automação baseada em regras determinísticas.
 
-```text
+Exemplo:
+
 Descrição contém "UBER"
         ↓
 Categoria Transporte
-```
 
-As regras pertencem ao usuário, possuem prioridade determinística e não alteram valor, natureza, conta ou identidade bancária da movimentação. Uma categoria já definida pelo usuário não é sobrescrita automaticamente.
+As regras pertencem ao usuário, possuem prioridade determinística e não alteram:
 
-Atualmente, a categorização automática **não utiliza IA**.
+valor;
+natureza;
+conta;
+identidade bancária;
+fato financeiro original.
 
-## Arquitetura multibanco
+Uma categoria já definida manualmente pelo usuário não é sobrescrita automaticamente.
+
+Atualmente, a categorização automática baseada em regras não utiliza IA.
+
+Arquitetura multibanco
 
 A fundação multibanco separa dados cadastrados manualmente de dados originados por integrações financeiras:
 
-```text
 Contas:      MANUAL | CONNECTED
 Transações:  MANUAL | SYNCED
-```
 
 O pipeline segue a ideia:
 
-```text
 Provider
    ↓
 Adapter
@@ -116,123 +236,262 @@ Prisma
 Domínio financeiro
    ↓
 Dashboard / Contas / Transações
-```
 
-Uma sandbox bancária foi criada para validar instituições, conexões, contas externas, movimentações e reexecução de sincronizações sem duplicidade.
+Essa separação permite que o domínio financeiro seja alimentado tanto por operações manuais quanto por futuras integrações externas.
 
-Entre os cenários já validados estão Pix recebido, Pix enviado, boleto, transferência bancária, preservação de categorização após resync e cálculo de saldo usando o mesmo domínio das contas manuais.
+Uma sandbox bancária também foi criada para validar:
 
-> Nenhum banco real ou integração Open Finance está conectado atualmente.
+instituições;
+conexões;
+contas externas;
+movimentações;
+sincronizações;
+idempotência;
+preservação de categorização;
+cálculo de saldo.
 
-Mais detalhes em [`docs/architecture.md`](docs/architecture.md).
+Entre os cenários já validados estão:
 
-## Desenvolvimento com LLMs
+Pix recebido;
+Pix enviado;
+boleto;
+transferência bancária;
+reexecução de sincronização sem duplicidade;
+preservação de categorização após resync;
+cálculo de saldo utilizando o mesmo domínio das contas manuais.
 
-O Finora também é um ambiente de experimentação com **Large Language Models (LLMs)** aplicados a um processo real de engenharia de software.
+Nenhum banco real ou integração Open Finance está conectado atualmente.
 
-### Modelos e ecossistemas experimentados
+Mais detalhes em docs/architecture.md.
 
-- OpenAI GPT / ChatGPT
-- Anthropic Claude
-- NVIDIA Nemotron
-- MiMo
+Desenvolvimento com LLMs
 
-### Ferramentas de apoio
+O Finora também funciona como um ambiente de experimentação com Large Language Models (LLMs) aplicados a um processo real de engenharia de software.
 
-- OpenAI Codex CLI
-- Claude Code
-- OpenCode
-- OmniRoute
-- Model Context Protocol (MCP)
+Modelos e ecossistemas experimentados
+OpenAI GPT / ChatGPT
+Anthropic Claude
+NVIDIA Nemotron
+MiMo
+Ferramentas de apoio
+OpenAI Codex CLI
+Claude Code
+OpenCode
+OmniRoute
+Model Context Protocol (MCP)
 
-As ferramentas acima não são tratadas como LLMs; elas fazem parte da infraestrutura usada para interagir, executar ou orquestrar os modelos.
+As ferramentas acima não são tratadas como LLMs. Elas fazem parte da infraestrutura utilizada para interagir, executar, testar ou orquestrar os modelos.
 
 O ciclo adotado no desenvolvimento é:
 
-```text
-planejar → implementar → auditar → corrigir → validar
-```
+planejar
+   ↓
+implementar
+   ↓
+auditar
+   ↓
+corrigir
+   ↓
+validar
 
-Código sugerido por uma LLM não é considerado concluído apenas porque foi gerado. Dependendo da alteração, o processo inclui typecheck, lint, validação do Prisma, revisão de migrations, testes de regras de negócio, idempotência, ownership, segurança, inspeção visual e validação manual no navegador.
+Código sugerido por uma LLM não é considerado concluído apenas porque foi gerado.
 
-O objetivo da abordagem multi-modelo é observar como diferentes LLMs se comportam em tarefas reais de engenharia, sem depender de um único modelo para todas as etapas.
+Dependendo da alteração, o processo inclui:
 
-Mais detalhes em [`docs/llm-development.md`](docs/llm-development.md).
+análise da arquitetura existente;
+planejamento;
+implementação assistida por IA;
+revisão de código;
+typecheck;
+lint;
+validação do Prisma;
+revisão de migrations;
+testes de regras de negócio;
+testes de idempotência;
+validação de ownership;
+auditorias de segurança;
+inspeção visual;
+validação manual no navegador.
 
-## Stack
+O objetivo da abordagem multi-modelo é observar como diferentes LLMs se comportam em tarefas reais de engenharia, comparando abordagens e identificando onde a IA pode acelerar o desenvolvimento e onde a validação humana continua sendo necessária.
 
-### Frontend
+Mais detalhes em docs/llm-development.md.
 
-- **Next.js 15**
-- **React 19**
-- **TypeScript**
-- **Tailwind CSS 3**
-- **React Hook Form**
-- **Zod**
-- **Radix UI**
+Stack
+Frontend
+Next.js 15
+React 19
+TypeScript
+Tailwind CSS 3
+React Hook Form
+Zod
+Radix UI
+Lucide
+Backend e dados
+Next.js App Router
+Auth.js / NextAuth 5
+Prisma 6
+PostgreSQL 16
+bcryptjs
+Resend
+Qualidade e validação
+TypeScript strict
+ESLint
+Prisma validation
+migrations versionadas
+validações de domínio
+testes de idempotência
+testes de segurança
+auditorias de ownership
+auditorias de integridade financeira
+inspeção visual
+testes manuais de fluxo
+Princípios de engenharia
 
-### Backend e dados
+Algumas invariantes importantes orientam o desenvolvimento do Finora:
 
-- **Next.js App Router**
-- **Auth.js / NextAuth 5**
-- **Prisma 6**
-- **PostgreSQL**
-- **bcryptjs**
-- **Resend** — infraestrutura de e-mail preparada para o fluxo de verificação
+categorização não altera o fato financeiro;
+sincronização repetida não deve duplicar movimentações;
+ownership é validado no servidor;
+o cliente não controla userId;
+dados de integração bancária não são confiados ao cliente;
+decisões manuais do usuário prevalecem sobre automações;
+dados de sandbox e fixtures são restritos ao desenvolvimento;
+integrações externas passam por normalização antes de chegar ao domínio;
+uma falha de enriquecimento não deve impedir a persistência do fato financeiro;
+operações financeiras relacionadas devem preservar suas invariantes;
+alterações financeiras críticas devem ser realizadas atomicamente quando necessário;
+entidades de usuários diferentes não podem ser relacionadas;
+o domínio financeiro deve permanecer consistente independentemente da origem dos dados.
+Segurança
 
-### Qualidade e validação
+A segurança é tratada como parte do desenvolvimento do produto, não como uma etapa posterior.
 
-- TypeScript strict
-- ESLint
-- Prisma validation
-- migrations versionadas
-- validações de domínio
-- testes de idempotência
-- auditorias de segurança
-- inspeção visual e testes manuais de fluxo
+O processo inclui:
 
-## Princípios de engenharia
+Autenticação
+     ↓
+Sessão
+     ↓
+Ownership
+     ↓
+Validação de entrada
+     ↓
+Regras de negócio
+     ↓
+Integridade financeira
+     ↓
+Auditoria
+     ↓
+Testes
 
-Algumas invariantes importantes orientam o desenvolvimento:
+Entre as práticas adotadas estão:
 
-- categorização não altera o fato financeiro;
-- sincronização repetida não deve duplicar movimentações;
-- ownership é validado no servidor;
-- o cliente não controla `userId` nem campos de integração bancária;
-- decisões manuais do usuário prevalecem sobre automações;
-- dados de sandbox e fixtures são restritos ao desenvolvimento;
-- integrações externas passam por normalização antes de chegar ao domínio;
-- uma falha de enriquecimento não deve impedir a persistência do fato financeiro.
+autenticação no servidor;
+validação de entrada com Zod;
+rate limiting;
+proteção de sessões;
+isolamento por usuário;
+validação de ownership;
+soft delete;
+transações atômicas;
+testes de integridade;
+auditorias de segurança;
+revisão de operações financeiras críticas.
 
-## Roadmap
+O projeto também utiliza ciclos específicos de hardening para revisar autenticação, autorização, ownership e integridade financeira.
 
-Próximas etapas planejadas:
+Roadmap
 
-- módulo de transferências;
-- orçamentos;
-- relatórios financeiros;
-- cartões e ciclo de faturas;
-- reconciliação entre contas próprias;
-- integração com provider financeiro real / Open Finance;
-- sincronização automática via jobs e webhooks;
-- categorização avançada;
-- futuras funcionalidades de IA para sugestões e insights;
-- hardening para produção distribuída.
+O Finora está sendo desenvolvido de forma incremental.
 
-Mais detalhes em [`docs/roadmap.md`](docs/roadmap.md).
+Fundação
+ Autenticação
+ Dashboard
+ Contas
+ Transações
+ Transferências
+ Orçamentos
+ Investimentos
+ Relatórios
+ Fundação multibanco
+ Sandbox bancária
+ Categorização manual
+ Regras determinísticas de categorização
+Engenharia e segurança
+ Hardening de autenticação
+ Invalidação de sessões
+ Rate limiting
+ Auditorias de ownership
+ Hardening de integridade de transferências
+ Continuação do hardening das relações financeiras
+ Hardening para cenários distribuídos
+Próximas evoluções
+ Cartões e ciclo de faturas
+ Reconciliação entre contas próprias
+ Integração com provider financeiro real
+ Open Finance
+ Sincronização automática via jobs e webhooks
+ Categorização avançada
+ Funcionalidades de IA para sugestões e insights
+ Análises financeiras inteligentes
+ Hardening para produção distribuída
 
-## Status atual
+Mais detalhes em docs/roadmap.md.
 
-O checkpoint atual cobre:
+Status atual
 
-**autenticação → Dashboard → contas → transações → fundação multibanco → sandbox bancária → categorização manual → regras automáticas determinísticas**
+O Finora atualmente possui uma base funcional que cobre:
 
-A próxima fase funcional planejada é o módulo de **Transferências**.
+Autenticação
+     ↓
+Dashboard
+     ↓
+Contas
+     ↓
+Transações
+     ↓
+Transferências
+     ↓
+Orçamentos
+     ↓
+Investimentos
+     ↓
+Relatórios
+     ↓
+Fundação multibanco
+     ↓
+Sandbox bancária
+     ↓
+Categorização
+     ↓
+Regras determinísticas
+     ↓
+Hardening de segurança e integridade
 
-## Código-fonte e licença
+O projeto segue em desenvolvimento ativo, com foco em consolidar a fundação financeira antes da entrada de integrações bancárias reais e funcionalidades mais avançadas de IA.
 
-O código-fonte principal do Finora é mantido em **repositório privado**. Este repositório público existe para demonstração técnica, documentação e avaliação em contexto de portfólio e recrutamento.
+Código-fonte e licença
 
-Isso permite apresentar decisões de produto, arquitetura e engenharia sem publicar integralmente a implementação de um produto com potencial de exploração comercial.
+O código-fonte principal do Finora é mantido em repositório privado.
 
-Este repositório é disponibilizado apenas para fins de portfólio, demonstração e avaliação. Consulte [`LICENSE`](LICENSE) para os termos de uso.
+Este repositório público existe para demonstração técnica, documentação e avaliação em contexto de portfólio e recrutamento.
+
+A separação permite apresentar:
+
+decisões de produto;
+arquitetura;
+tecnologias;
+evolução da interface;
+princípios de engenharia;
+processo de desenvolvimento com LLMs;
+
+sem publicar integralmente a implementação de um produto com potencial de exploração comercial.
+
+Este repositório é disponibilizado apenas para fins de portfólio, demonstração e avaliação.
+
+Consulte LICENSE para os termos de uso.
+
+
+
+**Essa versão eu considero bem mais adequada para o estado atual do Finora.** Principalmente porque o README passa a contar uma história coerente: **produto → interface → funcionalidades → arquitetura → uso de LLMs → stack → segurança → roadmap**, em vez de misturar o estado antigo do projeto com as novas telas.
